@@ -2,7 +2,7 @@ import configparser
 import requests
 import pandas as pd
 from datetime import datetime
-from pytz import timezone
+from datetime import timezone
 
 
 def airport_codes(cities, API_key):
@@ -64,11 +64,15 @@ def flight_arrivals(icao_list, API_key):
             flight_dict = {}
 
             flight_dict['arrival_icao'] = icao
-            flight_dict['arrival_time_local'] = flight['arrival']['scheduled']
+            flight_dict['arrival_time_local'] = datetime.fromisoformat(
+            flight['arrival']['scheduled'][:-6]).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+
             flight_dict['arrival_terminal'] = flight['arrival']['terminal']
             flight_dict['departure_city'] = flight['departure']['timezone']
             flight_dict['departure_icao'] = flight['departure']['icao']
-            flight_dict['departure_time_local'] = flight['departure']['scheduled']
+            flight_dict['departure_time_local'] = datetime.fromisoformat(
+            flight['departure']['scheduled'][:-6]).astimezone(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+
             flight_dict['airline'] = flight['airline']['name']
             flight_dict['flight_number'] = flight['flight']['number']
             flight_dict['data_retrieved_on'] = datetime.now().astimezone(timezone('Europe/Berlin')).date()
@@ -90,4 +94,5 @@ airport_codes = airport_codes(cities, airport_API_key)
 icao_list = airport_codes
 
 print(icao_list)
-print(flight_arrivals(icao_list, flight_API_key))
+flights_df = flight_arrivals(icao_list, flight_API_key)
+print(flights_df)

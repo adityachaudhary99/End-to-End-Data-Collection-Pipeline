@@ -36,4 +36,5 @@ def wiki_scrape(cities):
 
 
 cities = ['Berlin', 'Hamburg', 'London']
-print(wiki_scrape(cities))
+cities_df = wiki_scrape(cities)
+print(cities_df)

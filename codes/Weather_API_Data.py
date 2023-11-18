@@ -63,8 +63,5 @@ config.read('config.ini')
 API_key = config['secret']['API_key']
 
 cities = ['Berlin', 'Hamburg', 'London']
-print(weather_data(cities, API_key))
-
-
-
-
+weather_df = weather_data(cities, API_key)
+print(weather_df)
